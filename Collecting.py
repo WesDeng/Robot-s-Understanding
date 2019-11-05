@@ -58,8 +58,8 @@ from operator import add
 
 def takephoto(camera):
     camera.start_preview()
-    sleep(2)
-    camera.capture('image.jpg')
+    sleep(0.5)
+    #camera.capture('image.jpg')
     camera.capture(random.choice(image_list))
     camera.stop_preview()
 
@@ -82,7 +82,37 @@ def image_overlay(image1, image2):
     image1.save('overlay.png', "PNG")
 
 
+
 def main():
+    title = 'Anatomy of Brain'
+    width = 1600
+    height = 900
+
+
+    screen = pg.display.set_mode((width, height))
+    pg.display.set_caption(title)
+    clock = pg.time.Clock()
+
+    back_1 = pg.Surface((800, 450))
+    back_1 = back_1.convert()
+    back_1.fill(WHITE)
+    screen.blit(back_1,(0,0))
+    
+    back_2 = pg.Surface((800, 450))
+    back_2 = back_2.convert()
+    back_2.fill(BLUE)
+    screen.blit(back_2,(800,00))
+    
+    back_3 = pg.Surface((800, 450))
+    back_3 = back_3.convert()
+    back_3.fill(RED)
+    screen.blit(back_3,(0,450))
+    
+    back_4 = pg.Surface((800, 450))
+    back_4 = back_4.convert()
+    back_4.fill(PURPLE)
+    screen.blit(back_4,(800,450))
+    
 
     camera = picamera.PiCamera()
     pg.init()
@@ -94,18 +124,7 @@ def main():
     channel_record = pg.mixer.Channel(2) # Pre recording.
 
     # Variable for GUI
-    title = 'Anatomy of Brain'
-    width = 1200
-    height = 800
 
-
-    screen = pg.display.set_mode((width, height))
-    pg.display.set_caption(title)
-    clock = pygame.time.Clock()
-
-    background = pygame.Surface(screen.get_size())
-    background = background.convert()
-    background.fill(WHITE)
 
     # Create a pygame GUI with layout, four picture.
     # 1. Picture manipulating. Blinking.
@@ -116,24 +135,36 @@ def main():
 
     while True:
 
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                pg.quit()
+        #for event in pg.event.get():
+            #if event.type == pg.QUIT:
+                #pg.quit()
 
-        takephoto(camera)
+        #takephoto(camera)
+        camera.start_preview()
+        #sleep(0.5)
+        #camera.capture('image.jpg')
+        camera.capture(random.choice(image_list))
+        camera.stop_preview()
 
         # create picture signal and put it onto the Py GUI
+        pic1 = pg.image.load('image_1.jpg')
+        pic2 = pg.image.load('image_2.jpg')
+        pic3 = pg.image.load('image_3.jpg')
+        #pic4 = pg.image.load(random.choice(picture_list))
+        screen.blit(pic1, (0, 0))
+        screen.blit(pic2, (800, 0))
+        screen.blit(pic3, (0, 450))
+        screen.blit(pic1, (800, 450))
+        sleep(2)
 
-        
-
-        with open('image.jpg', 'rb') as image_file:
-            content = image_file.read()
-            image = vision.types.Image(content=content)
+        #with open('image.jpg', 'rb') as image_file:
+            #content = image_file.read()
+            #image = vision.types.Image(content=content)
 
 
-            single_label = image_labeling(image)
+            #single_label = image_labeling(image)
 
-            print(single_label)
+            #print(single_label)
 
 
 
