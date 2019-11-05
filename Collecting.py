@@ -32,8 +32,8 @@ A = (120, 200, 130)
 B = (240, 90, 0)
 C = (20, 50, 240)
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="DET_wesley.json"
-client = vision.ImageAnnotatorClient()
+#os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="DET_wesley.json"
+#client = vision.ImageAnnotatorClient()
 
 image = 'image.jpg'
 
@@ -112,6 +112,9 @@ def main():
     back_4 = back_4.convert()
     back_4.fill(PURPLE)
     screen.blit(back_4,(800,450))
+    
+    pg.display.flip()
+    
 
 
     camera = picamera.PiCamera()
@@ -142,20 +145,25 @@ def main():
         #takephoto(camera)
         camera.start_preview()
         #sleep(0.5)
-        #camera.capture('image.jpg')
+        camera.capture('image.jpg')
+        print('take image')
         camera.capture(random.choice(image_list))
+        print('take again')
         camera.stop_preview()
 
         # create picture signal and put it onto the Py GUI
+        print('load...')
         pic1 = pg.image.load('image_1.jpg')
         pic2 = pg.image.load('image_2.jpg')
         pic3 = pg.image.load('image_3.jpg')
         pic4 = pg.image.load('image.jpg')
+        print('load finished')
         screen.blit(pic1, (0, 0))
         screen.blit(pic2, (800, 0))
         screen.blit(pic3, (0, 450))
         screen.blit(pic1, (800, 450))
-        sleep(2)
+        pg.display.flip()
+        sleep(0.5)
 
         #with open('image.jpg', 'rb') as image_file:
             #content = image_file.read()
