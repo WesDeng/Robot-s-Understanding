@@ -2,6 +2,7 @@ import picamera
 import pygame as pg
 import os
 from PIL import Image
+from PIL import ImageFilter
 
 from google.cloud import vision
 from time import sleep
@@ -39,7 +40,7 @@ image = 'image.jpg'
 
 overlay = 'overlay.jpg'
 
-image_list = ['image_1.jpg', 'image_2.jpg', 'image_3.jpg']
+image_list = ['image_3.jpg', 'image_4.jpg', 'dummy_image.jpg']
 
 picture_list = ['a.jpg', 'b.jpg', 'c.jpg', 'd.jpg', 'e.jpg', 'f.jpg', 'g.jpg',
                 'h.jpg', 'i.jpg', 'j.jpg', 'k.jpg', 'l.jpg', 'm.jpg', 'n.jpg']
@@ -76,11 +77,44 @@ def image_labeling(image):
     return label_list
 
 
-# cover laying to image files
-def image_overlay(image1, image2):
-    image1.paste(image1, (0, 0), image2)
-    image1.save('overlay.png', "PNG")
+def edge(image_name):
+    image = Image.open(image_name)
+    imageWithEdges = image.filter(ImageFilter.FIND_EDGES)
+    imageWithEdges.save(image_name)
+    
+def emboss(image_name):
+    image = Image.open(image_name)
+    imageWithEdges = image.filter(ImageFilter.EMBOSS)
+    imageWithEdges.save(image_name)
+    
+def box(image_name):
+    image = Image.open(image_name)
+    imageWithEdges = image.filter(ImageFilter.BoxBlur(3))
+    imageWithEdges.save(image_name)
+    
+def kernel(image_name):
+    image = Image.open(image_name)
+    imageWithEdges = image.filter(ImageFilter.RankFilter((3,3), 9/2))
+    imageWithEdges.save(image_name)
 
+
+# cover laying to image files
+def image_overlay(image, to_add):
+    background = Image.open(image).convert('RGB')
+    overlay = Image.open(to_add).convert('RGB')
+    new_img = Image.blend(background, overlay, 0.5)
+    new_img.save(image)
+    
+
+
+#background = Image.open("bg.png")
+#overlay = Image.open("ol.jpg")
+#
+#background = background.convert("RGBA")
+#overlay = overlay.convert("RGBA")
+
+#new_img = Image.blend(background, overlay, 0.5)
+#new_img.save("new.png","PNG")
 
 
 def main():
@@ -146,24 +180,32 @@ def main():
         camera.start_preview()
         #sleep(0.5)
         camera.capture('image.jpg')
+        camera.capture('image_1.jpg')
+        camera.capture('image_2.jpg')
         print('take image')
         camera.capture(random.choice(image_list))
+        
         print('take again')
         camera.stop_preview()
+        
+        edge('image_1.jpg')
+        emboss('image_2.jpg')
+        image_overlay('image_4.jpg', 'image.jpg')
+        
 
         # create picture signal and put it onto the Py GUI
         print('load...')
-        pic1 = pg.image.load('image_1.jpg')
-        pic2 = pg.image.load('image_2.jpg')
-        pic3 = pg.image.load('image_3.jpg')
-        pic4 = pg.image.load('image.jpg')
+        pic1 = pg.image.load('image_2.jpg')
+        pic2 = pg.image.load('image_1.jpg')
+        pic3 = pg.image.load('image.jpg')
+        pic4 = pg.image.load('image_4.jpg')
         print('load finished')
         screen.blit(pic1, (0, 0))
         screen.blit(pic2, (800, 0))
         screen.blit(pic3, (0, 450))
-        screen.blit(pic1, (800, 450))
+        screen.blit(pic4, (800, 450))
         pg.display.flip()
-        sleep(0.5)
+        #sleep(0.8)
 
         #with open('image.jpg', 'rb') as image_file:
             #content = image_file.read()
