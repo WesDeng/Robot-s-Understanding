@@ -76,6 +76,7 @@ def image_labeling(image):
         vision_list.extend(label_list)
     return label_list
 
+# Signal Processing process
 
 def edge(image_name):
     image = Image.open(image_name)
@@ -89,7 +90,7 @@ def emboss(image_name):
     
 def box(image_name):
     image = Image.open(image_name)
-    imageWithEdges = image.filter(ImageFilter.BoxBlur(3))
+    imageWithEdges = image.filter(ImageFilter.BoxBlur(36))
     imageWithEdges.save(image_name)
     
 def kernel(image_name):
@@ -102,7 +103,7 @@ def kernel(image_name):
 def image_overlay(image, to_add):
     background = Image.open(image).convert('RGB')
     overlay = Image.open(to_add).convert('RGB')
-    new_img = Image.blend(background, overlay, 0.5)
+    new_img = Image.blend(background, overlay, 0.6)
     new_img.save(image)
     
 
@@ -182,21 +183,21 @@ def main():
         camera.capture('image.jpg')
         camera.capture('image_1.jpg')
         camera.capture('image_2.jpg')
-        print('take image')
+        #print('take image')
         camera.capture(random.choice(image_list))
         
         print('take again')
         camera.stop_preview()
         
-        edge('image_1.jpg')
-        emboss('image_2.jpg')
+        emboss('image_1.jpg')
+        box('image_2.jpg')
         image_overlay('image_4.jpg', 'image.jpg')
         
 
         # create picture signal and put it onto the Py GUI
         print('load...')
-        pic1 = pg.image.load('image_2.jpg')
-        pic2 = pg.image.load('image_1.jpg')
+        pic1 = pg.image.load('image_1.jpg')
+        pic2 = pg.image.load('image_2.jpg')
         pic3 = pg.image.load('image.jpg')
         pic4 = pg.image.load('image_4.jpg')
         print('load finished')
