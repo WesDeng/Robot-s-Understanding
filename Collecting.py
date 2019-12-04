@@ -70,7 +70,7 @@ def main():
 
 
     while True:
-        
+
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
@@ -86,6 +86,7 @@ def main():
             single_label = image_labeling(image)
 
             print(single_label)
+
 
 
 
