@@ -11,11 +11,35 @@ import sys
 import re
 import random
 
+from adafruit_crickit import crickit
+from adafruit_seesaw.neopixel import NeoPixel
+
+num_pixels = 37  # Number (37) of pixels driven from Crickit NeoPixel terminal
+
+# The following line sets up a NeoPixel strip on Seesaw pin 20 for Feather
+pixels = NeoPixel(crickit.seesaw, 20, num_pixels)
+
+RED = (255, 0, 0)
+YELLOW = (255, 150, 0)
+GREEN = (0, 255, 0)
+CYAN = (0, 255, 255)
+BLUE = (0, 100, 100)
+PURPLE = (180, 0, 255)
+OFF = (0,0,0)
+WHITE = (255,255,255)
+A = (120, 200, 130)
+B = (240, 90, 0)
+C = (20, 50, 240)
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="DET_wesley.json"
 client = vision.ImageAnnotatorClient()
 
 image = 'image.jpg'
+
+image_list = ['image_1.jpg', 'image_2.jpg', 'image_3.jpg']
+
+audio_list = []
+
 
 
 vision_list = []
@@ -28,6 +52,7 @@ def takephoto(camera):
     camera.start_preview()
     sleep(.5)
     camera.capture('image.jpg')
+    camera.capture(random.choice(image_list))
     camera.stop_preview()
 
 def image_labeling(image):
@@ -55,15 +80,16 @@ def main():
     channel_record = pg.mixer.Channel(2) # Pre recording.
 
     # Variable for GUI
-    title = 'Brain'
-    width = 640
-    height = 480
+    title = 'Anatomy of Brain'
+    width = 1200
+    height = 800
+
 
     my_surface = pg.display.set_mode((width, height))
     pg.display.set_caption(title)
 
-    # Create a pygame GUI with layout.
-    # 1.
+    # Create a pygame GUI with layout, four picture.
+    # 1. Picture manipulating. Blinking.
 
     # Recording the realtime radio and play back.
 
