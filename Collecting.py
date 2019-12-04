@@ -12,7 +12,7 @@ import re
 import random
 
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="det-cloud.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="DET_wesley.json"
 client = vision.ImageAnnotatorClient()
 
 image = 'image.jpg'
@@ -38,7 +38,7 @@ def image_labeling(image):
     #this next block of code parses the various labels returned by google,
     #extracts the text descriptions, and combines them into a single string.
     for label in labels:
-        label_list.append(label)
+        label_list.append(label.description)
         vision_list.extend(label_list)
     return label_list
 
@@ -59,8 +59,8 @@ def main():
     width = 640
     height = 480
 
-    my_surface = pygame.display.set_mode((width, height))
-    pygame.display.set_caption(title)
+    my_surface = pg.display.set_mode((width, height))
+    pg.display.set_caption(title)
 
     # Create a pygame GUI with layout.
     # 1.
@@ -71,9 +71,9 @@ def main():
 
     while True:
         
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                pg.quit()
 
         takephoto(camera)
 
