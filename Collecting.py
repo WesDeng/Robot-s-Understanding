@@ -97,22 +97,22 @@ def main():
     back_1 = back_1.convert()
     back_1.fill(WHITE)
     screen.blit(back_1,(0,0))
-    
+
     back_2 = pg.Surface((800, 450))
     back_2 = back_2.convert()
     back_2.fill(BLUE)
     screen.blit(back_2,(800,00))
-    
+
     back_3 = pg.Surface((800, 450))
     back_3 = back_3.convert()
     back_3.fill(RED)
     screen.blit(back_3,(0,450))
-    
+
     back_4 = pg.Surface((800, 450))
     back_4 = back_4.convert()
     back_4.fill(PURPLE)
     screen.blit(back_4,(800,450))
-    
+
 
     camera = picamera.PiCamera()
     pg.init()
@@ -150,7 +150,7 @@ def main():
         pic1 = pg.image.load('image_1.jpg')
         pic2 = pg.image.load('image_2.jpg')
         pic3 = pg.image.load('image_3.jpg')
-        #pic4 = pg.image.load(random.choice(picture_list))
+        pic4 = pg.image.load('image.jpg')
         screen.blit(pic1, (0, 0))
         screen.blit(pic2, (800, 0))
         screen.blit(pic3, (0, 450))
