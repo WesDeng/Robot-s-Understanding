@@ -1,6 +1,7 @@
 import picamera
 import pygame as pg
 import os
+from PIL import Image
 
 from google.cloud import vision
 from time import sleep
@@ -36,7 +37,14 @@ client = vision.ImageAnnotatorClient()
 
 image = 'image.jpg'
 
+overlay = 'overlay.jpg'
+
 image_list = ['image_1.jpg', 'image_2.jpg', 'image_3.jpg']
+
+picture_list = ['a.jpg', 'b.jpg', 'c.jpg', 'd.jpg', 'e.jpg', 'f.jpg', 'g.jpg',
+                'h.jpg', 'i.jpg', 'j.jpg', 'k.jpg', 'l.jpg', 'm.jpg', 'n.jpg']
+
+
 
 audio_list = []
 
@@ -50,7 +58,7 @@ from operator import add
 
 def takephoto(camera):
     camera.start_preview()
-    sleep(.5)
+    sleep(2)
     camera.capture('image.jpg')
     camera.capture(random.choice(image_list))
     camera.stop_preview()
@@ -66,6 +74,12 @@ def image_labeling(image):
         label_list.append(label.description)
         vision_list.extend(label_list)
     return label_list
+
+
+# cover laying to image files
+def image_overlay(image1, image2):
+    image1.paste(image1, (0, 0), image2)
+    image1.save('overlay.png', "PNG")
 
 
 def main():
@@ -85,8 +99,13 @@ def main():
     height = 800
 
 
-    my_surface = pg.display.set_mode((width, height))
+    screen = pg.display.set_mode((width, height))
     pg.display.set_caption(title)
+    clock = pygame.time.Clock()
+
+    background = pygame.Surface(screen.get_size())
+    background = background.convert()
+    background.fill(WHITE)
 
     # Create a pygame GUI with layout, four picture.
     # 1. Picture manipulating. Blinking.
@@ -105,9 +124,12 @@ def main():
 
         # create picture signal and put it onto the Py GUI
 
+        
+
         with open('image.jpg', 'rb') as image_file:
             content = image_file.read()
             image = vision.types.Image(content=content)
+
 
             single_label = image_labeling(image)
 
