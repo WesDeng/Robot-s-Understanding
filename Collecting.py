@@ -80,7 +80,7 @@ def image_labeling(image):
 
 def edge(image_name):
     image = Image.open(image_name)
-    imageWithEdges = image.filter(ImageFilter.FIND_EDGES)
+    imageWithEdges = image.filter(ImageFilter.CONTOUR)
     imageWithEdges.save(image_name)
     
 def emboss(image_name):
@@ -97,6 +97,17 @@ def kernel(image_name):
     image = Image.open(image_name)
     imageWithEdges = image.filter(ImageFilter.RankFilter((3,3), 9/2))
     imageWithEdges.save(image_name)
+    
+def color(image_name):
+    img = Image.open(image_name)
+    for i in range(0, img.size[0]-1):
+        for j in range(0, img.size[1]-1):
+            pixelColorVals = img.getpixel((i,j))
+            redPixel    = 255 - pixelColorVals[0] 
+            greenPixel  = 255 - pixelColorVals[1] 
+            bluePixel   = 255 - pixelColorVals[2]
+            img.putpixel((i,j),(redPixel, greenPixel, bluePixel))
+    img.save(image_name)
 
 
 # cover laying to image files
@@ -120,35 +131,15 @@ def image_overlay(image, to_add):
 
 def main():
     title = 'Anatomy of Brain'
-    width = 1600
-    height = 900
+    width = 1800
+    height = 1000
 
 
     screen = pg.display.set_mode((width, height))
     pg.display.set_caption(title)
     clock = pg.time.Clock()
 
-    back_1 = pg.Surface((800, 450))
-    back_1 = back_1.convert()
-    back_1.fill(WHITE)
-    screen.blit(back_1,(0,0))
-
-    back_2 = pg.Surface((800, 450))
-    back_2 = back_2.convert()
-    back_2.fill(BLUE)
-    screen.blit(back_2,(800,00))
-
-    back_3 = pg.Surface((800, 450))
-    back_3 = back_3.convert()
-    back_3.fill(RED)
-    screen.blit(back_3,(0,450))
-
-    back_4 = pg.Surface((800, 450))
-    back_4 = back_4.convert()
-    back_4.fill(PURPLE)
-    screen.blit(back_4,(800,450))
-    
-    pg.display.flip()
+    #pg.display.flip()
     
 
 
@@ -190,8 +181,9 @@ def main():
         camera.stop_preview()
         
         emboss('image_1.jpg')
-        box('image_2.jpg')
-        image_overlay('image_4.jpg', 'image.jpg')
+        box('image.jpg')
+        image_overlay('image_4.jpg', 'image_3.jpg')
+        edge('image_2.jpg')
         
 
         # create picture signal and put it onto the Py GUI
