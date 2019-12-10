@@ -16,7 +16,7 @@ import random
 from adafruit_crickit import crickit
 from adafruit_seesaw.neopixel import NeoPixel
 
-num_pixels = 37  # Number (37) of pixels driven from Crickit NeoPixel terminal
+num_pixels = 30  # Number (37) of pixels driven from Crickit NeoPixel terminal
 
 # The following line sets up a NeoPixel strip on Seesaw pin 20 for Feather
 pixels = NeoPixel(crickit.seesaw, 20, num_pixels)
@@ -27,7 +27,7 @@ GREEN = (0, 255, 0)
 CYAN = (0, 255, 255)
 BLUE = (0, 100, 100)
 PURPLE = (180, 0, 255)
-OFF = (0,0,0)
+BLACK = (0,0,0)
 WHITE = (255,255,255)
 A = (120, 200, 130)
 B = (240, 90, 0)
@@ -102,6 +102,13 @@ def kernel(image_name):
     imageWithEdges = image.filter(ImageFilter.RankFilter((3,3), 9/2))
     imageWithEdges.save(image_name)
 
+def color_chase(color, wait):
+    for i in range(num_pixels):
+        pixels[i] = color
+        time.sleep(wait)
+        pixels.show()
+    time.sleep(0.5)
+
 def color(image_name):
     img = Image.open(image_name)
     for i in range(0, img.size[0]-1):
@@ -135,8 +142,8 @@ def image_overlay(image, to_add):
 
 def main():
     title = 'Anatomy of Brain'
-    width = 1800
-    height = 900
+    width = 1024
+    height = 614
 
 
     screen = pg.display.set_mode((width, height))
@@ -148,12 +155,15 @@ def main():
     camera = picamera.PiCamera()
     pg.init()
     pg.mixer.init()
-    pg.mixer.set_num_channels(3)
+    pg.mixer.music.set_volume(1)
+    pg.mixer.music.load('Interpreting.mp3')
+    #pg.mixer.music.play()
 
 
-    channel_real = pg.mixer.Channel(0) # Real time streaming.
-    channel_effect = pg.mixer.Channel(1) # Sound effect
-    channel_record = pg.mixer.Channel(2) # Pre recording.
+
+    #channel_real = pg.mixer.Channel(0) # Real time streaming.
+    #channel_effect = pg.mixer.Channel(1) # Sound effect
+    #channel_record = pg.mixer.Channel(2) # Pre recording.
 
     #channel_real.play(pg.mixer.Sound('Interpreting.mp3'))
 
@@ -164,7 +174,7 @@ def main():
                 #pg.quit()
 
         #takephoto(camera)
-        camera.start_preview()
+        #camera.start_preview()
         #sleep(0.5)
         #camera.capture('text.jpg')
         camera.capture('image.jpg')
@@ -174,12 +184,15 @@ def main():
         camera.capture(random.choice(image_list))
 
         print('take again')
-        camera.stop_preview()
+        #camera.stop_preview()
 
         emboss('image_1.jpg')
         #box('image.jpg')
         image_overlay('image_4.jpg', 'image_3.jpg')
         edge('image_2.jpg')
+        
+        color_chase(WHITE, 0.05)
+        color_chase(BLACK, 0.05)
 
 
         # create picture signal and put it onto the Py GUI
@@ -191,9 +204,9 @@ def main():
         pic4 = pg.image.load('image_4.jpg')
         print('load finished')
         screen.blit(pic1, (0, 0))
-        screen.blit(pic2, (720, 0))
-        screen.blit(pic3, (0, 450))
-        screen.blit(pic4, (720, 450))
+        screen.blit(pic2, (500, 0))
+        screen.blit(pic3, (0, 307))
+        screen.blit(pic4, (500, 307))
         pg.display.flip()
         #sleep(0.8)
 
