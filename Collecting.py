@@ -136,7 +136,7 @@ def image_overlay(image, to_add):
 def main():
     title = 'Anatomy of Brain'
     width = 1800
-    height = 1000
+    height = 900
 
 
     screen = pg.display.set_mode((width, height))
@@ -155,7 +155,7 @@ def main():
     channel_effect = pg.mixer.Channel(1) # Sound effect
     channel_record = pg.mixer.Channel(2) # Pre recording.
 
-    channel_real.play(pg.mixer.Sound('Interpreting.mp3'))
+    #channel_real.play(pg.mixer.Sound('Interpreting.mp3'))
 
     while True:
 
@@ -166,32 +166,34 @@ def main():
         #takephoto(camera)
         camera.start_preview()
         #sleep(0.5)
+        #camera.capture('text.jpg')
         camera.capture('image.jpg')
         camera.capture('image_1.jpg')
         camera.capture('image_2.jpg')
-        #print('take image')
+        print('take image')
         camera.capture(random.choice(image_list))
 
         print('take again')
         camera.stop_preview()
 
         emboss('image_1.jpg')
-        box('image.jpg')
+        #box('image.jpg')
         image_overlay('image_4.jpg', 'image_3.jpg')
         edge('image_2.jpg')
 
 
         # create picture signal and put it onto the Py GUI
         print('load...')
+        #pic_t = pg.image.load('text.jpg')
         pic1 = pg.image.load('pixels/' + random.choice(picture_list))
         pic2 = pg.image.load('image_1.jpg')
         pic3 = pg.image.load('image.jpg')
         pic4 = pg.image.load('image_4.jpg')
         print('load finished')
         screen.blit(pic1, (0, 0))
-        screen.blit(pic2, (800, 0))
+        screen.blit(pic2, (720, 0))
         screen.blit(pic3, (0, 450))
-        screen.blit(pic4, (800, 450))
+        screen.blit(pic4, (720, 450))
         pg.display.flip()
         #sleep(0.8)
 
